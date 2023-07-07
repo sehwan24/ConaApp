@@ -1,5 +1,6 @@
-package Cona.App;
+package Cona.App.answer;
 
+import Cona.App.notification.Notification;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
