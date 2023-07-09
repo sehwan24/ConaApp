@@ -1,6 +1,5 @@
-package Cona.App.notification;
+package Cona.App.domain;
 
-import Cona.App.answer.Answer;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

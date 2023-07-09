@@ -1,5 +1,6 @@
-package Cona.App.notification;
+package Cona.App.repository;
 
+import Cona.App.domain.Notification;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

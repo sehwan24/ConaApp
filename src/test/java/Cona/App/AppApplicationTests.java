@@ -1,9 +1,9 @@
 package Cona.App;
 
-import Cona.App.answer.Answer;
-import Cona.App.answer.AnswerRepository;
-import Cona.App.notification.Notification;
-import Cona.App.notification.NotificationRepository;
+import Cona.App.domain.Answer;
+import Cona.App.domain.Notification;
+import Cona.App.repository.AnswerRepository;
+import Cona.App.repository.NotificationRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @SpringBootTest
 class AppApplicationTests {
 
-	@Autowired // 스프링이 객체 대신 생성, 순환참조 문제와 같은 이유로 테스트코드 외에는 생성자를 통한 객체 주입방식 권장.
+	@Autowired // 스프링이 객체 대신 생성, 순환참조 문제와 같은 이유로 테스트코드 외에는 생성자를 통한 객체 주입방식 권장. *순환참조 : A클래스가 B클래스의 Bean주입받고, B클래스가 A클래스의 Bean 주입받는 상황
 	private NotificationRepository notificationRepository;
 
 	@Autowired
