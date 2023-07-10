@@ -9,15 +9,44 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="notification, loop : ${notificationList}">
-            <td th:text="${loop.count}"></td>
-            <td>
-                <a th:href="@{|/notification/detail/${notification.id}|}" th:text="${notification.subject}"></a>
-            </td>
-            <td th:text="${#temporals.format(notification.createDate, 'yyyy-MM-dd HH:mm')}"></td>
-        </tr>
+            <tr th:each="notification, loop : ${paging}">
+                <td th:text="${paging.getTotalElements - (paging.number * paging.size) - loop.index}"></td>
+                <td>
+                    <a th:href="@{|/notification/detail/${notification.id}|}" th:text="${notification.subject}"></a>
+                    <span class="text-danger small ms-2"
+                          th:if="${#lists.size(notification.answerList) > 0}"
+                          th:text="${#lists.size(notification.answerList)}">
+                    </span>
+                </td>
+                <td th:text="${#temporals.format(notification.createDate, 'yyyy-MM-dd HH:mm')}"></td>
+            </tr>
         </tbody>
     </table>
+    <!-- 페이징처리 시작 -->
+    <div th:if="${!paging.isEmpty()}">
+        <ul class="pagination justify-content-center">
+            <li class="page-item" th:classappend="${!paging.hasPrevious} ? 'disabled'">
+                <a class="page-link"
+                    th:href="@{|?page=0|}">
+                    <!--  th:href="@{|?page=${paging.number-1}|}">  -->
+                    <span>처음</span>
+                </a>
+            </li>
+            <li th:each="page: ${#numbers.sequence(0, paging.getTotalPages()-1)}"
+                th:if="${page >= paging.number -3 and page <= paging.number +3}"
+                th:classappend="${page == paging.number} ? 'active'"
+                class="page-item">
+                <a th:text="${page}" class="page-link" th:href="@{|?page=${page}|}"></a>
+            </li>
+            <li class="page-item" th:classappend="${!paging.hasNext} ? 'disabled'">
+<!--                <a class="page-link" th:href="@{|?page=${paging.number+1}|}">-->
+                <a class="page-link" th:href="@{|?page=${paging.getTotalPages() -1}|}">
+                    <span>마지막</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <!-- 페이징처리 끝 -->
     <a th:href="@{/notification/create}" class="btn btn-primary">질문 등록하기</a>
 </div>
 </html>

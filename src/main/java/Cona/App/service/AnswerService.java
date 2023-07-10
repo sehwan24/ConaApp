@@ -17,7 +17,7 @@ public class AnswerService {
         Answer answer = new Answer();
         answer.setContent(content);
         answer.setCreateDate(LocalDateTime.now());
-        answer.setNotification_id(notification);
+        answer.setNotification(notification);
         this.answerRepository.save(answer);
     }
 }

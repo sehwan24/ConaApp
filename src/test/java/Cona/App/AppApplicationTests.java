@@ -4,6 +4,7 @@ import Cona.App.domain.Answer;
 import Cona.App.domain.Notification;
 import Cona.App.repository.AnswerRepository;
 import Cona.App.repository.NotificationRepository;
+import Cona.App.service.NotificationService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -24,6 +25,10 @@ class AppApplicationTests {
 
 	@Autowired
 	private AnswerRepository answerRepository;
+
+	@Autowired
+	private NotificationService notificationService;
+
 	@Test
 	void makeTest() {
 //		테스트데이터 생성
@@ -99,7 +104,7 @@ class AppApplicationTests {
 		Notification n = on.get();
 		Answer a = new Answer();
 		a.setContent("네 자동으로 생성됩니다.");
-		a.setNotification_id(n); //어떤 질문의 답변인지 알기 위해 Notification 객체 필요함.
+		a.setNotification(n); //어떤 질문의 답변인지 알기 위해 Notification 객체 필요함.
 		a.setCreateDate(LocalDateTime.now());
 		this.answerRepository.save(a);
 	}
@@ -108,7 +113,7 @@ class AppApplicationTests {
 		Optional<Answer> oa = this.answerRepository.findById(1);
 		assertTrue(oa.isPresent());
 		Answer a = oa.get();
-		assertEquals(2, a.getNotification_id().getId());
+		assertEquals(2, a.getNotification().getId());
 	}
 
 	@Transactional	//어노테이션 제거시 에러 발생. why) 첫 줄에서 findById로 객체 조회 후 DB세션 끊기므로 line5에서 q.getAnswerList 메서드 실행시 오류 발생. why)답변 데이터 리스트는 첫 객체 조회 시 가져오지 않음.
@@ -122,5 +127,14 @@ class AppApplicationTests {
 
 		assertEquals(1, answerList.size());
 		assertEquals("네 자동으로 생성됩니다.", answerList.get(0).getContent());
+	}
+
+	@Test
+	void makeTestcase() {
+		for (int i = 1; i <= 60; i++) {
+			String subject = String.format("테스트 데이터입니다:[%03d]", i);
+			String content = "CONA 차기 운영진 모집 공지";
+			this.notificationService.create(subject, content);
+		}
 	}
 }

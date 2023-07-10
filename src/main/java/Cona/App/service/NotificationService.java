@@ -4,9 +4,14 @@ import Cona.App.utility.DataNotFoundException;
 import Cona.App.domain.Notification;
 import Cona.App.repository.NotificationRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,9 +21,13 @@ public class NotificationService {
 
     private final NotificationRepository notificationRepository;
 
-    public List<Notification> getList() {
-        return this.notificationRepository.findAll();
+    public Page<Notification> getList(int page) {
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("createDate"));
+        Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
+        return this.notificationRepository.findAll(pageable);
     }
+
 
     public Notification getNotification(Integer id) {
         Optional<Notification> notification = this.notificationRepository.findById(id);
