@@ -1,5 +1,6 @@
 package Cona.App.service;
 
+import Cona.App.domain.AppUser;
 import Cona.App.utility.DataNotFoundException;
 import Cona.App.domain.Notification;
 import Cona.App.repository.NotificationRepository;
@@ -38,11 +39,12 @@ public class NotificationService {
         }
     }
 
-    public void create(String subject, String content) {
+    public void create(String subject, String content, AppUser user) {
         Notification n = new Notification();
         n.setSubject(subject);
         n.setContent(content);
         n.setCreateDate(LocalDateTime.now());
+        n.setAuthor(user);
         this.notificationRepository.save(n);
     }
 }

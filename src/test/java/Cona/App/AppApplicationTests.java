@@ -134,7 +134,7 @@ class AppApplicationTests {
 		for (int i = 1; i <= 60; i++) {
 			String subject = String.format("테스트 데이터입니다:[%03d]", i);
 			String content = "CONA 차기 운영진 모집 공지";
-			this.notificationService.create(subject, content);
+			this.notificationService.create(subject, content, null);
 		}
 	}
 }

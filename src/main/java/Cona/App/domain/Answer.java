@@ -25,4 +25,7 @@ public class Answer {
     private Notification notification;
 
     private LocalDateTime modifyDate;
+
+    @ManyToOne
+    private AppUser author;
 }

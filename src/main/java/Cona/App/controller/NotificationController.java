@@ -1,17 +1,21 @@
 package Cona.App.controller;
 
+import Cona.App.domain.AppUser;
 import Cona.App.domain.Notification;
 import Cona.App.service.NotificationService;
+import Cona.App.service.UserService;
 import Cona.App.utility.AnswerForm;
 import Cona.App.utility.NotificationForm;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RequestMapping("/notification")
@@ -20,6 +24,7 @@ import java.util.List;
 public class NotificationController {
 
     private final NotificationService notificationService;
+    private final UserService userService;
 
     @GetMapping("/list")
     public String list(Model model, @RequestParam(value="page", defaultValue="0") int page) {
@@ -38,17 +43,20 @@ public class NotificationController {
         return "notification_detail";
     }
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/create")
     public String notificationCreate(NotificationForm notificationForm) {
         return "notification_form";
     }
 
+    @PreAuthorize("isAuthenticated()")
     @PostMapping("/create") //GetMapping과 함수명 **매개변수의 형태가 다를 때** 동일하게 사용가능 = 메서드 오버로딩
-    public String notificationCreate(@Valid NotificationForm notificationForm, BindingResult bindingResult) {
+    public String notificationCreate(@Valid NotificationForm notificationForm, BindingResult bindingResult, Principal principal) {
         if (bindingResult.hasErrors()) {
             return "notification_form";
         }
-        this.notificationService.create(notificationForm.getSubject(), notificationForm.getContent());
+        AppUser appUser = this.userService.getUser(principal.getName());
+        this.notificationService.create(notificationForm.getSubject(), notificationForm.getContent(), appUser);
         return "redirect:/notification/list";
     }
 

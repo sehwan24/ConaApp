@@ -30,4 +30,7 @@ public class Notification {
     //질문-답변 1:N 관계이므로 공지 엔티티의 답변 속성은 List형태임.
     @OneToMany(mappedBy = "notification", cascade = CascadeType.REMOVE)
     private List<Answer> answerList;
+
+    @ManyToOne
+    private AppUser author;
 }
