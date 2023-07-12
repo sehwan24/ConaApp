@@ -40,7 +40,7 @@ public class FCMService {
         log.info(response.body().string());
     }
 
-//    @Scheduled(cron = "* * * * * ?")    //msg 스케줄링
+    @Scheduled(cron = "0 00 13 * * ?")    //msg 스케줄링 오후 1시마다
     public void scheduledAlarm() throws FirebaseMessagingException, IOException {
         log.info("Test");
         sendMessageTo("eoMUbvsBR-eroyIjYWj48R:APA91bFFJCFp3Q_Qifel4VCIZDwN6WjEMpsf-rmhY6LFXqze_J5TmvJeIBzX90yIK7ZlAw225cnno3doylQjLO-ljMQd6sj6jFUIXyz6w5WvfTJbTM99VjO9H7lQ6r4sA9X2dBchIz4V", "Test", "Test");
@@ -63,7 +63,7 @@ public class FCMService {
         return objectMapper.writeValueAsString(fcmMessageDto);
     }
 
-    private String getAccessToken() throws IOException {
+    private String getAccessToken() throws IOException {  //AccessToken < 파베 접근 권한
         String firebaseConfigPath = "firebase/cona-9d535-firebase-adminsdk-gm35g-a55eb5f575.json";
         GoogleCredentials googleCredentials = GoogleCredentials
                 .fromStream(new ClassPathResource(firebaseConfigPath).getInputStream())
