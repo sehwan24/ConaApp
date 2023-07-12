@@ -9,14 +9,15 @@ import Cona.App.utility.NotificationForm;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.security.Principal;
-import java.util.List;
 
 @RequestMapping("/notification")
 @RequiredArgsConstructor    //final이 붙은 속성을 포함하는 생성자 자동 생성, lombok의 @게터 세터의 메서드 생성기능과 유사함.
@@ -27,7 +28,7 @@ public class NotificationController {
     private final UserService userService;
 
     @GetMapping("/list")
-    public String list(Model model, @RequestParam(value="page", defaultValue="0") int page) {
+    public String list(Model model, @RequestParam(value = "page", defaultValue = "0") int page) {
         Page<Notification> paging = this.notificationService.getList(page);
         model.addAttribute("paging", paging);
         //List<Notification> notificationList = this.notificationService.getList();
@@ -60,5 +61,29 @@ public class NotificationController {
         return "redirect:/notification/list";
     }
 
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/modify/{id}")
+    public String notificationModify(NotificationForm notificationForm, @PathVariable("id") Integer id, Principal principal) {
+        Notification notification = this.notificationService.getNotification(id);
+        if (!notification.getAuthor().getUsername().equals(principal.getName())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
+        }
+        notificationForm.setSubject(notification.getSubject());
+        notificationForm.setContent(notification.getContent());
+        return "notification_form";
+    }
 
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("modify/{id}")
+    public String notificationModify(@Valid NotificationForm notificationForm, BindingResult bindingResult, Principal principal, @PathVariable("id") Integer id) {
+        if (bindingResult.hasErrors()) {
+            return "notification_form";
+        }
+        Notification notification = this.notificationService.getNotification(id);
+        if (!notification.getAuthor().getUsername().equals(principal.getName())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
+        }
+        this.notificationService.modify(notification, notificationForm.getSubject(), notificationForm.getContent());
+        return String.format("redirect:/notification/detail/%s", id);
+    }
 }

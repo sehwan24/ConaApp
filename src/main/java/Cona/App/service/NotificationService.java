@@ -47,4 +47,11 @@ public class NotificationService {
         n.setAuthor(user);
         this.notificationRepository.save(n);
     }
+
+    public void modify(Notification notification, String subject, String content) {
+        notification.setSubject(subject);
+        notification.setContent(content);
+        notification.setModifyDate(LocalDateTime.now());
+        this.notificationRepository.save(notification);
+    }
 }
