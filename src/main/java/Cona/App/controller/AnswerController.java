@@ -40,8 +40,8 @@ public class AnswerController {
             model.addAttribute("notification", notification);
             return "notification_detail";
         }
-        this.answerService.create(notification, answerForm.getContent(), appUser);
-        return String.format("redirect:/notification/detail/%s", id);
+        Answer answer = this.answerService.create(notification, answerForm.getContent(), appUser);
+        return String.format("redirect:/notification/detail/%s#answer_%s", answer.getNotification().getId(), answer.getId());
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -66,7 +66,7 @@ public class AnswerController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
         }
         this.answerService.modify(answer, answerForm.getContent());
-        return String.format("redirect:/notification/detail/%s", answer.getNotification().getId());
+        return String.format("redirect:/notification/detail/%s#answer_%s", answer.getNotification().getId(), answer.getId());
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -77,6 +77,6 @@ public class AnswerController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "삭제권한이 없습니다.");
         }
         this.answerService.delete(answer);
-        return String.format("redirect:/notification/detail/%s", answer.getNotification().getId());
+        return String.format("redirect:/notification/detail/%s#answer_%s", answer.getNotification().getId(), answer.getId());
     }
 }

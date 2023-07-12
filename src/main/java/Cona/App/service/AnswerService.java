@@ -16,13 +16,14 @@ import java.util.Optional;
 public class AnswerService {
     private final AnswerRepository answerRepository;
 
-    public void create(Notification notification, String content, AppUser author) {
+    public Answer create(Notification notification, String content, AppUser author) {
         Answer answer = new Answer();
         answer.setContent(content);
         answer.setCreateDate(LocalDateTime.now());
         answer.setNotification(notification);
         answer.setAuthor(author);
         this.answerRepository.save(answer);
+        return answer;
     }
 
     public Answer getAnswer(Integer id) {
