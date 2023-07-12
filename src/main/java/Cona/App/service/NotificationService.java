@@ -54,4 +54,8 @@ public class NotificationService {
         notification.setModifyDate(LocalDateTime.now());
         this.notificationRepository.save(notification);
     }
+
+    public void delete(Notification notification) {
+        this.notificationRepository.delete(notification);
+    }
 }

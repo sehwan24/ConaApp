@@ -86,4 +86,15 @@ public class NotificationController {
         this.notificationService.modify(notification, notificationForm.getSubject(), notificationForm.getContent());
         return String.format("redirect:/notification/detail/%s", id);
     }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/delete/{id}")
+    public String notificationDelete(Principal principal, @PathVariable("id") Integer id) {
+        Notification notification = this.notificationService.getNotification(id);
+        if (!notification.getAuthor().getUsername().equals(principal.getName())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "삭제권한이 없습니다.");
+        }
+        this.notificationService.delete(notification);
+        return "redirect:/";
+    }
 }
