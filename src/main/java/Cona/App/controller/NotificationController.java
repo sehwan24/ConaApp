@@ -28,12 +28,10 @@ public class NotificationController {
     private final UserService userService;
 
     @GetMapping("/list")
-    public String list(Model model, @RequestParam(value = "page", defaultValue = "0") int page) {
-        Page<Notification> paging = this.notificationService.getList(page);
+    public String list(Model model, @RequestParam(value = "page", defaultValue = "0") int page, @RequestParam(value = "kw", defaultValue = "") String kw) {
+        Page<Notification> paging = this.notificationService.getList(page, kw);
         model.addAttribute("paging", paging);
-        //List<Notification> notificationList = this.notificationService.getList();
-        //model.addAttribute("notificationList", notificationList);
-        //Model 객체는 자바클래스와 템플릿 간의 연결고리 역할. Model 객체에 값을 담아두면 템플릿에서 그 값을 사용할 수 있음.
+        model.addAttribute("kw", kw);
         return "notification_list";
     }
 
