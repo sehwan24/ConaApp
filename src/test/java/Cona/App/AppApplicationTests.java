@@ -33,14 +33,14 @@ class AppApplicationTests {
 	void makeTest() {
 //		테스트데이터 생성
 		Notification n1 = new Notification();
-		n1.setSubject("sbb가 무엇인가요?");
-		n1.setContent("sbb에 대해서 알고 싶습니다.");
+		n1.setSubject("cona가 무엇인가요?");
+		n1.setContent("cona에 대해서 알고 싶습니다.");
 		n1.setCreateDate(LocalDateTime.now());
 		this.notificationRepository.save(n1);  // 첫번째 질문 저장
 
 		Notification n2 = new Notification();
-		n2.setSubject("스프링부트 모델 질문입니다.");
-		n2.setContent("id는 자동으로 생성되나요?");
+		n2.setSubject("cona 질문입니다.");
+		n2.setContent("cona는 어떤 커뮤니티인가요?");
 		n2.setCreateDate(LocalDateTime.now());
 		this.notificationRepository.save(n2);  // 두번째 질문 저장
 	}
@@ -48,18 +48,18 @@ class AppApplicationTests {
 	void findAllTest() {
 //		데이터 수는 일치하는지, 데이터 내용 일치하는지
 		List<Notification> all = this.notificationRepository.findAll();
-		assertEquals(2, all.size());
+		assertEquals(3, all.size());
 
-		Notification n = all.get(0);
-		assertEquals("sbb가 무엇인가요?", n.getSubject());
+		Notification n = all.get(1);
+		assertEquals("cona가 무엇인가요?", n.getSubject());
 	}
 
 	@Test
 	void findByIdTest() {
-		Optional<Notification> on = this.notificationRepository.findById(1);
+		Optional<Notification> on = this.notificationRepository.findById(2);
 		if (on.isPresent()) {
 			Notification n = on.get();
-			assertEquals("sbb가 무엇인가요?", n.getSubject());
+			assertEquals("cona가 무엇인가요?", n.getSubject());
 		}
 	}
 	@Test
@@ -81,7 +81,7 @@ class AppApplicationTests {
 
 	@Test
 	void updateSubjectTest() {
-		Optional<Notification> on = this.notificationRepository.findById(1);
+		Optional<Notification> on = this.notificationRepository.findById(2);
 		assertTrue(on.isPresent());
 		Notification n = on.get();
 		n.setSubject("수정된 제목");
@@ -89,12 +89,12 @@ class AppApplicationTests {
 	}
 	@Test
 	void deleteById() {
-		assertEquals(2, this.notificationRepository.count());
+		assertEquals(3, this.notificationRepository.count());
 		Optional<Notification> on = this.notificationRepository.findById(1);
 		assertTrue(on.isPresent());
 		Notification n = on.get();
 		this.notificationRepository.delete(n);
-		assertEquals(1, this.notificationRepository.count());
+		assertEquals(2, this.notificationRepository.count());
 	}
 
 	@Test
@@ -132,8 +132,8 @@ class AppApplicationTests {
 	@Test
 	void makeTestcase() {
 		for (int i = 1; i <= 60; i++) {
-			String subject = String.format("테스트 데이터입니다:[%03d]", i);
-			String content = "CONA 차기 운영진 모집 공지";
+			String subject = String.format("어제 종강했어요:[%03d]", i);
+			String content = "쉴 수가 없네요";
 			this.notificationService.create(subject, content, null);
 		}
 	}

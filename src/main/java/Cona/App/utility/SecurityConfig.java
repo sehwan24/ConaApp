@@ -23,7 +23,7 @@ public class SecurityConfig {
                         new AntPathRequestMatcher("/**")).permitAll()
                 .and()                                                              // and(): http 객체 설정 추가로 이어서
                 .csrf().ignoringRequestMatchers(                                    // 스프링 시큐리티가 CSRF 처리시
-                        new AntPathRequestMatcher("/h2-console/**"))         // H2 콘솔은 예외처리
+                        new AntPathRequestMatcher("/127.0.0.1:3306/cona/**"))         // H2 콘솔은 예외처리
                 .and()
                 .headers()                                                          //위의 세줄 작성시 콘솔화면 깨짐 현상
                 .addHeaderWriter(new XFrameOptionsHeaderWriter(                     //
